@@ -8,7 +8,7 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/magik6k/.zshrc'
 export GOPATH=/home/magik6k/.opt/go
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH:/home/magik6k/.opt/bin:/home/magik6k/.gem/ruby/2.3.0/bin:/usr/local/go/bin:$GOPATH/bin:/home/magik6k/bin
+export PATH=/home/magik6k/.opt/bin:$GOPATH/bin:/bin:/sbin:/usr/bin:/usr/sbin:$PATH:/home/magik6k/.gem/ruby/2.3.0/bin:/usr/local/go/bin:/home/magik6k/bin
 export EDITOR=vim
 
 autoload -U compinit promptinit
@@ -34,9 +34,9 @@ source ${ZDOTDIR:-$HOME}/.zkbd/$TERM-$VENDOR-$OSTYPE
 DOTFILES="$HOME/dotfiles"
 
 # Style
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $DOTFILES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $DOTFILES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=7
 

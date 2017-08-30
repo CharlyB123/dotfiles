@@ -13,3 +13,9 @@ alias cdgo='f() { cd $(gofind $1) };f'
 alias cdgosrc='cd ~/.opt/go/src/github.com'
 alias vimp='f() { vim $(which $1) };f'
 alias gxtree='f() { paste <(gx deps --tree --highlight=$1) <(gx deps --tree --highlight=$1 | awk -v gopath=$GOPATH '"'"'{print gopath "/src/gx/ipfs/"$(NF-1)"/"$(NF-2)"/package.json"}'"'"' | sed -r '"'"'s/\x1b\[[0-9;]*m?//g'"'"' | xargs cat | jq .gx.dvcsimport --raw-output | xargs -i cat $GOPATH/src/{}/package.json | jq .version --raw-output) | awk -v yellow="$(tput setaf 3)" -v reset="$(tput sgr0)" '"'"'{if($(NF)==$(NF-1)){ print $0 }else{ print yellow $0 reset }}'"'"'};f'
+alias git-pullall='find . -maxdepth 1 -mindepth 1 -type d | xargs -i sh -c "cd {}; pwd; git pull --ff-only"'
+
+# get dvcs deps using gx deps
+alias gx-goget='gx deps | xargs -L 1 sh -c "ipfs cat \$1/\$0/package.json | jq .gx.dvcsimport --raw-output" | xargs go get'
+
+alias gitcid='f() { printf z; printf "01781114$1" | bases hex base58; echo };f'
