@@ -19,3 +19,8 @@ alias git-pullall='find . -maxdepth 1 -mindepth 1 -type d | xargs -i sh -c "cd {
 alias gx-goget='gx deps | xargs -L 1 sh -c "ipfs cat \$1/\$0/package.json | jq .gx.dvcsimport --raw-output" | xargs go get'
 
 alias gitcid='f() { printf z; printf "01781114$1" | bases hex base58; echo };f'
+
+alias gxpkgname='f(){ ipfs ls $1 --enc json | jq ".Objects[0].Links[0].Name" --raw-output };f'
+alias gxpkg='f(){ cat package.json | jq ".gxDependencies[] | select(.name == \"$1\")" };f '
+alias gxfixupdate='f(){ cat gx-workspace-update.json | jq ".Changes[]" --raw-output | xargs -i bash -c "paste <(git cat-file blob \$(git ls-tree HEAD^ | grep package.json | awk \"{print \\\$3}\") | jq \".gxDependencies[] | select(.name == \\\"\$(ipfs ls {} --enc json | jq \".Objects[0].Links[0].Name\" --raw-output)\\\") | .hash\" --raw-output) <(echo {})" | awk "NF==2{print}{}" | tee .gxfix };f'
+alias gxfixapply='f(){ git checkout -- package.json; cat .gxfix | xargs -l gx update };f'
