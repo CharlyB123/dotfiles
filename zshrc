@@ -7,7 +7,10 @@ bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/magik6k/.zshrc'
-export GOPATH=/home/magik6k/.opt/go
+if [ -z $GOPATH ]; then
+  export GOPATH=/home/magik6k/.opt/go
+fi;
+
 export PATH=/home/magik6k/.opt/bin:$GOPATH/bin:/bin:/sbin:/usr/bin:/usr/sbin:$PATH:/home/magik6k/.gem/ruby/2.3.0/bin:/usr/local/go/bin:/home/magik6k/bin
 export EDITOR=vim
 
@@ -97,3 +100,9 @@ ZSH_AUTOSUGGEST_STRATEGY=histdb_top
 # Aliases
 
 source "$DOTFILES/zshaliases"
+
+PATH="/home/magik6k/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/magik6k/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/magik6k/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/magik6k/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/magik6k/perl5"; export PERL_MM_OPT;

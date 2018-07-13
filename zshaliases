@@ -5,6 +5,7 @@ alias '#=sudo'
 alias "colw=perl -pe 's/( +)/\\033[41m\$1\\033[00m/g'"
 alias g=git
 alias gxdep='f() { gx deps --tree --highlight=$1 };f'
+alias wut='echo wüt'
 
 alias pd='popd'
 alias gwc='pushd $(cat gx-workspace-update.json | jq .Current --raw-output)'
@@ -24,3 +25,29 @@ alias gxpkgname='f(){ ipfs ls $1 --enc json | jq ".Objects[0].Links[0].Name" --r
 alias gxpkg='f(){ cat package.json | jq ".gxDependencies[] | select(.name == \"$1\")" };f '
 alias gxfixupdate='f(){ cat gx-workspace-update.json | jq ".Changes[]" --raw-output | xargs -i bash -c "paste <(git cat-file blob \$(git ls-tree HEAD^ | grep package.json | awk \"{print \\\$3}\") | jq \".gxDependencies[] | select(.name == \\\"\$(ipfs ls {} --enc json | jq \".Objects[0].Links[0].Name\" --raw-output)\\\") | .hash\" --raw-output) <(echo {})" | awk "NF==2{print}{}" | tee .gxfix };f'
 alias gxfixapply='f(){ git checkout -- package.json; cat .gxfix | xargs -l gx update };f'
+
+tempgo() {
+  pkgname=$1
+  gp=$(mktemp -d /tmp/gopath.XXXXX)
+  echo go get $pkgname...
+  mkdir -p $gp/src
+  GOPATH=$gp go get $pkgname
+  pushd $gp/src/$pkgname
+  GOPATH=$gp zsh
+  popd
+  echo "Cleaning up.."
+  rm -rf $gp
+}
+
+gxupdate() {
+	pkgname=$(gxpkgname $1)
+	echo "Updating ${pkgname}"
+
+	gx update $(gxpkg $pkgname | jq .hash --raw-output) $1
+}
+
+alias tipfs='IPFS_PATH=/tmp/ipfs ipfs '
+
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+
