@@ -11,7 +11,7 @@ if [ -z $GOPATH ]; then
   export GOPATH=/home/magik6k/.opt/go
 fi;
 
-export PATH=/home/magik6k/.opt/bin:$GOPATH/bin:/bin:/sbin:/usr/bin:/usr/sbin:$PATH:/home/magik6k/.gem/ruby/2.3.0/bin:/usr/local/go/bin:/home/magik6k/bin
+export PATH=/home/magik6k/.opt/bin:$GOPATH/bin:/bin:/sbin:/usr/bin:/usr/sbin:$PATH:/home/magik6k/.gem/ruby/2.3.0/bin:/usr/local/go/bin:/home/magik6k/bin:/home/magik6k/.npm-global/bin
 export EDITOR=vim
 
 autoload -U compinit promptinit
@@ -86,23 +86,41 @@ add-zsh-hook preexec _start_timer
 add-zsh-hook precmd  _stop_timer
 
 _zsh_autosuggest_strategy_histdb_top() {
-    local query="PRAGMA case_sensitive_like = true; select commands.argv from
+    local query="select commands.argv from
 history left join commands on history.command_id = commands.rowid
 left join places on history.place_id = places.rowid
 where commands.argv LIKE '$(sql_escape $1)%'
 group by commands.argv
-order by places.dir != '$(sql_escape $PWD)', count(*) desc limit 1"
+order by places.dir = '$(sql_escape $PWD)' desc, max(history.start_time) desc, count(*) desc limit 1"
     suggestion=$(_histdb_query "$query")
 }
+
+_zsh_autosuggest_strategy_histdb_part() {
+	_zsh_autosuggest_strategy_histdb_top $1
+
+	suggestion=$(echo $suggestion | egrep -o '^.{'$(printf '%s' $1 | wc -c)'}[^ @\.]*[ @\.]?')
+}
+
+# _zsh_autosuggest_strategy_histdb_top() {
+#    local query="PRAGMA case_sensitive_like = true; select commands.argv from
+#history left join commands on history.command_id = commands.rowid
+#left join places on history.place_id = places.rowid
+#where commands.argv LIKE '$(sql_escape $1)%'
+#group by commands.argv
+#order by places.dir != '$(sql_escape $PWD)', count(*) desc limit 1"
+#    suggestion=$(_histdb_query "$query")
+#}
 
 ZSH_AUTOSUGGEST_STRATEGY=histdb_top
 
 # Aliases
 
 source "$DOTFILES/zshaliases"
+source "$DOTFILES/privalias"
 
 PATH="/home/magik6k/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/home/magik6k/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/home/magik6k/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/magik6k/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/magik6k/perl5"; export PERL_MM_OPT;
+

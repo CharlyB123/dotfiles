@@ -25,6 +25,11 @@ alias gxpkgname='f(){ ipfs ls $1 --enc json | jq ".Objects[0].Links[0].Name" --r
 alias gxpkg='f(){ cat package.json | jq ".gxDependencies[] | select(.name == \"$1\")" };f '
 alias gxfixupdate='f(){ cat gx-workspace-update.json | jq ".Changes[]" --raw-output | xargs -i bash -c "paste <(git cat-file blob \$(git ls-tree HEAD^ | grep package.json | awk \"{print \\\$3}\") | jq \".gxDependencies[] | select(.name == \\\"\$(ipfs ls {} --enc json | jq \".Objects[0].Links[0].Name\" --raw-output)\\\") | .hash\" --raw-output) <(echo {})" | awk "NF==2{print}{}" | tee .gxfix };f'
 alias gxfixapply='f(){ git checkout -- package.json; cat .gxfix | xargs -l gx update };f'
+alias sl='sl | lolcat'
+
+misdeps() {
+	go vet ./... 2>&1 | grep 'cannot find package' | grep -o '/[A-Z0-9a-z-]*"' | grep -o '[^/"]*' | xargs -i sh -c 'cat package.json | jq -c ".gxDependencies[] | select(.name = \"{}\") | {h: .hash, n: .name}"'
+}
 
 tempgo() {
   pkgname=$1
@@ -51,3 +56,8 @@ alias tipfs='IPFS_PATH=/tmp/ipfs ipfs '
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 
 
+hack() {
+	git clone https://$1
+	cd $(basename $1)
+	git checkout -b $2
+}
