@@ -822,7 +822,8 @@
   ush = push
 	oldest-ancestor = !zsh -c 'diff -u <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | sed -ne \"s/^ //p\" | head -1' -
 
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
 [rebase]
 	autosquash = true
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/

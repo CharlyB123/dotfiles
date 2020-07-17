@@ -6,6 +6,10 @@
 super + Return
 	terminator
 
+# screencap
+super + Print
+	ipfs-screencap -p -c
+
 # program launcher
 super + space
 	dmenu_run
@@ -135,4 +139,5 @@ XF86AudioStop
 XF86AudioPlay
     dbus-send --print-reply --dest=org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 
-
+super + q
+	i3lock-fancy
