@@ -820,6 +820,7 @@
 
   ull = pull
   ush = push
+	oldest-ancestor = !zsh -c 'diff -u <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | sed -ne \"s/^ //p\" | head -1' -
 
 [rebase]
 	autosquash = true

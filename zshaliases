@@ -6,6 +6,7 @@ alias "colw=perl -pe 's/( +)/\\033[41m\$1\\033[00m/g'"
 alias g=git
 alias gxdep='f() { gx deps --tree --highlight=$1 };f'
 alias wut='echo wüt'
+alias tlotus='LOTUS_PATH=/tmp/lotus ./lotus'
 
 alias pd='popd'
 alias gwc='pushd $(cat gx-workspace-update.json | jq .Current --raw-output)'
